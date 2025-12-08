@@ -71,6 +71,8 @@ def sanitize_for_myst_url(path: str) -> str:
         'multiple-special'
         >>> sanitize_for_myst_url("charters/MediaStrategyCharter")
         'charters/mediastrategycharter'
+        >>> sanitize_for_myst_url("content/01-demand/01-demand")
+        'content/demand/demand'
     """
     # Convert to lowercase
     slug = path.lower()
@@ -80,6 +82,9 @@ def sanitize_for_myst_url(path: str) -> str:
 
     # Collapse multiple consecutive hyphens
     slug = re.sub(r'-+', '-', slug)
+
+    # Remove leading numbers and hyphens
+    slug = "/".join([re.sub(r'^[\d-]+', '', s) for s in slug.split('/')])
 
     # Strip leading/trailing hyphens from each path component
     # This preserves directory structure while cleaning each component
